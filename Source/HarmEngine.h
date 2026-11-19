@@ -298,8 +298,10 @@ private:
             float w = 0.015f * sr;
             if (voiced && trackHz > 0.0f)
             {
+                // Whole even number of periods: the two grains sit half a window apart, so they
+                // must be a whole number of periods apart or they cancel.
                 const float P = sr / trackHz;
-                w = std::clamp (std::ceil (0.011f * sr / P) * P, 0.008f * sr, 0.03f * sr);
+                w = std::max (1.0f, std::ceil (0.011f * sr / (2.0f * P))) * 2.0f * P;
             }
             llWin += (w - llWin) * 0.15f;
             grainWin = llWin;
