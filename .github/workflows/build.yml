@@ -1,0 +1,71 @@
+name: Build Chillarmonizer
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Windows-VST3
+          - os: macos-latest
+            name: macOS-VST3-AU
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      # DSP checks first: pitch tracking, every shifter engine, harmony modes, stability sweep.
+      - name: DSP self-test
+        shell: bash
+        run: |
+          cmake --build build --config Release --target chillarmonizer_selftest
+          if [ -f build/Release/chillarmonizer_selftest.exe ]; then build/Release/chillarmonizer_selftest.exe; else build/chillarmonizer_selftest; fi
+
+      - name: Build plugin
+        run: cmake --build build --config Release --target Chillarmonizer_All --parallel 4
+
+      # Stress-test the built plugin with pluginval (strictest level).
+      - name: Validate (pluginval)
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            curl -sSL -o pv.zip https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_Windows.zip
+            7z x -y pv.zip > /dev/null
+            PV=./pluginval.exe
+          else
+            curl -sSL -o pv.zip https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_macOS.zip
+            unzip -q pv.zip
+            PV=./pluginval.app/Contents/MacOS/pluginval
+          fi
+          "$PV" --strictness-level 10 --validate-in-process --timeout-ms 600000 \
+                --output-dir pluginval-logs \
+                --validate "build/Chillarmonizer_artefacts/Release/VST3/Chillarmonizer.vst3"
+
+      - name: Package
+        shell: bash
+        run: |
+          cd build/Chillarmonizer_artefacts/Release
+          DIRS="VST3"
+          [ -d AU ] && DIRS="$DIRS AU"
+          cmake -E tar cf "$GITHUB_WORKSPACE/Chillarmonizer-${{ matrix.name }}.zip" --format=zip $DIRS
+
+      - name: Publish to "latest" release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create latest --title "Chillarmonizer (latest build)" \
+            --notes "Built automatically from ${GITHUB_SHA::7}." --prerelease 2>/dev/null || true
+          sleep 5
+          gh release upload latest "Chillarmonizer-${{ matrix.name }}.zip" --clobber
+
