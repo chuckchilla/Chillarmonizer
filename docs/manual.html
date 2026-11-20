@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chillarmonizer User Manual</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  :root { --violet:#5b3fa0; --lav:#ece6f8; --gold:#c9962b; --ink:#1f1a2b; --muted:#6b6380; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.45; margin: 0; background: #fff; }
+  h1, h2, h3 { color: var(--violet); line-height: 1.2; }
+  h2 { font-size: 18pt; margin: 0 0 8pt; padding-bottom: 4pt; border-bottom: 2px solid var(--gold); break-after: avoid; }
+  h3 { font-size: 12.5pt; margin: 14pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 7pt; }
+  .chapter { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 4pt 0 10pt; font-size: 9.5pt; break-inside: auto; }
+  tr { break-inside: avoid; }
+  th { background: var(--violet); color: #fff; text-align: left; padding: 4pt 6pt; font-weight: 600; }
+  td { padding: 4pt 6pt; border-bottom: 1px solid #ddd6ea; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8f6fc; }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  .note { background: var(--lav); border-left: 4px solid var(--violet); padding: 7pt 10pt; margin: 8pt 0 10pt; break-inside: avoid; }
+  .tip { background: #fbf4e4; border-left: 4px solid var(--gold); padding: 7pt 10pt; margin: 8pt 0 10pt; break-inside: avoid; }
+  code, .k { font-family: Consolas, monospace; font-size: 9.5pt; background: #f1edf8; padding: 0 3pt; border-radius: 2pt; }
+  ol, ul { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin-bottom: 3pt; }
+  /* cover */
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: center; text-align: center;
+           background: linear-gradient(160deg, #2a1b4f 0%, #5b3fa0 60%, #8a6fd0 100%); color: #fff; margin: -18mm -16mm 0; padding: 0 20mm; }
+  .cover .brand { letter-spacing: 6pt; font-size: 11pt; color: #e8d39c; margin-bottom: 18pt; }
+  .cover h1 { color: #fff; font-size: 46pt; margin: 0; letter-spacing: 1pt; }
+  .cover .sub { font-size: 15pt; margin-top: 10pt; color: #e3dbf6; }
+  .cover .ver { margin-top: 50pt; font-size: 10pt; color: #cfc4ee; }
+  .cover .keys { margin: 36pt auto 0; display: flex; gap: 3pt; justify-content: center; }
+  .cover .keys span { width: 14pt; height: 54pt; background: #fff; border-radius: 0 0 3pt 3pt; opacity: .9; }
+  .cover .keys span.on { background: #e8d39c; }
+  .cover .keys span.v { background: #b9a5f0; }
+  .toc { columns: 2; column-gap: 20pt; }
+  .toc div { padding: 2pt 0; border-bottom: 1px dotted #cfc6e3; break-inside: avoid; }
+  .toc b { color: var(--violet); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .card { border: 1px solid #ddd6ea; border-radius: 4pt; padding: 8pt 10pt; break-inside: avoid; }
+  .card h4 { margin: 0 0 4pt; color: var(--violet); font-size: 11pt; }
+  .diagram { font-family: Consolas, monospace; font-size: 9pt; background: #f8f6fc; border: 1px solid #ddd6ea; padding: 8pt; white-space: pre; break-inside: avoid; }
+  .footer-note { color: var(--muted); font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="brand">CHILLPLUGINS</div>
+  <h1>Chillarmonizer</h1>
+  <div class="sub">Intelligent harmonizer &middot; pitch shifter &middot; octaver<br>User Manual</div>
+  <div class="keys"><span></span><span class="on"></span><span></span><span class="v"></span><span></span><span></span><span class="v"></span><span></span><span class="v"></span><span></span></div>
+  <div class="ver">VST3 for Windows and macOS &middot; Audio Unit for macOS</div>
+</section>
+
+<!-- CONTENTS -->
+<section class="chapter">
+  <h2>Contents</h2>
+  <div class="toc">
+    <div><b>1</b> Welcome</div>
+    <div><b>2</b> Installation</div>
+    <div><b>3</b> Quick start</div>
+    <div><b>4</b> Signal flow</div>
+    <div><b>5</b> The header and display</div>
+    <div><b>6</b> HARMONY page</div>
+    <div><b>7</b> Harmony modes in depth</div>
+    <div><b>8</b> Shifting engines</div>
+    <div><b>9</b> PITCH FX page</div>
+    <div><b>10</b> OCTAVES &amp; FX page</div>
+    <div><b>11</b> OUTPUT &amp; MIDI page</div>
+    <div><b>12</b> MIDI control</div>
+    <div><b>13</b> Presets, A/B and Morph</div>
+    <div><b>14</b> Factory presets</div>
+    <div><b>15</b> Recipes</div>
+    <div><b>16</b> Troubleshooting</div>
+    <div><b>17</b> Specifications</div>
+  </div>
+
+  <h2 style="margin-top:22pt">1 &nbsp;Welcome</h2>
+  <p>Chillarmonizer packs the classic studio harmonizers, harmony and pitch pedals, and vocal harmony plugins into one plugin. Feed it a voice or an instrument and it can:</p>
+  <ul>
+    <li>add up to <b>four harmony voices</b>, each thickened into a <b>choir</b> of up to four copies;</li>
+    <li>choose harmony notes from a <b>fixed interval</b>, a <b>key and scale</b>, a <b>MIDI chord</b>, <b>MIDI notes</b>, or chords played on a <b>sidechain</b> track;</li>
+    <li>bend pitch with an <b>expression pedal</b>, drop-tune, wobble with an LFO, <b>freeze</b> a sound and <b>correct</b> pitch;</li>
+    <li>add polyphonic <b>octaves</b>, a <b>tracking synth</b>, pitch-shifting <b>crystal echoes</b> and <b>shimmer reverb</b>.</li>
+  </ul>
+  <p>Everything is in one window with four pages: <b>HARMONY</b>, <b>PITCH FX</b>, <b>OCTAVES &amp; FX</b> and <b>OUTPUT &amp; MIDI</b>.</p>
+  <div class="note"><b>Monophonic vs polyphonic.</b> The "smart" features (Diatonic, the chord modes, pitch correction, the Formant engine and the tracking synth) follow <i>one note at a time</i>. They work best on vocals, solo lines and melodies. Octaves, Drop tuning, Bends and the Poly engine with Fixed Interval also work on chords.</div>
+</section>
+
+<!-- INSTALL -->
+<section class="chapter">
+  <h2>2 &nbsp;Installation</h2>
+  <h3>Download</h3>
+  <p>Get the latest build from the Chillarmonizer GitHub repository, under <b>Releases &rarr; "Chillarmonizer (latest build)"</b>. Download the zip for your system.</p>
+  <h3>Windows</h3>
+  <ol>
+    <li>Unzip <span class="k">Chillarmonizer-Windows-VST3.zip</span>.</li>
+    <li>Copy <span class="k">Chillarmonizer.vst3</span> into <span class="k">C:\Program Files\Common Files\VST3\</span>.</li>
+    <li>Open your DAW and rescan plug-ins.</li>
+  </ol>
+  <h3>macOS</h3>
+  <ol>
+    <li>Unzip <span class="k">Chillarmonizer-macOS-VST3-AU.zip</span>.</li>
+    <li>Copy <span class="k">Chillarmonizer.vst3</span> into <span class="k">~/Library/Audio/Plug-Ins/VST3/</span>.</li>
+    <li>Copy <span class="k">Chillarmonizer.component</span> into <span class="k">~/Library/Audio/Plug-Ins/Components/</span>.</li>
+    <li>Rescan plug-ins in your DAW. Logic and GarageBand use the Audio Unit.</li>
+  </ol>
+  <p>Look for it under the manufacturer <b>CHILLplugins</b>. Its category is "Fx / Pitch Shift". On a Mac the Audio Unit is a <i>MIDI-controlled effect</i>, so it can receive MIDI notes for the MIDI modes.</p>
+
+  <h3>Routing MIDI and the sidechain</h3>
+  <ul>
+    <li><b>MIDI:</b> in most DAWs, create a MIDI track and set its output to the Chillarmonizer instance on your audio track. In Logic, choose the "MIDI-controlled Effects" version and pick the MIDI source in the Side Chain menu at the top of Logic's plugin window.</li>
+    <li><b>Sidechain:</b> Chillarmonizer has an optional stereo sidechain input. Send the guitar or keys track to it using your DAW's sidechain selector. It is only used in <b>Sidechain Chord</b> mode.</li>
+  </ul>
+</section>
+
+<!-- QUICK START -->
+<section class="chapter">
+  <h2>3 &nbsp;Quick start</h2>
+  <h3>A diatonic harmony in under a minute</h3>
+  <ol>
+    <li>Put Chillarmonizer on a vocal or a lead guitar track.</li>
+    <li>Choose the preset <b>Diatonic 3rd Up</b> from the preset menu.</li>
+    <li>On the HARMONY page, set <b>Key</b> to the key of your song, or choose <b>Auto</b> and let it detect the key from what you play.</li>
+    <li>Pick a <b>Scale</b>. Major and Natural Minor cover most songs.</li>
+    <li>Play or sing. The display shows the note it hears, and the keyboard lights the harmony note.</li>
+    <li>Turn on <b>Voice 2</b> and set its <b>Degree</b> to <i>5th up</i> for a three-part triad.</li>
+  </ol>
+  <h3>Choosing the right engine</h3>
+  <table>
+    <tr><th>Source</th><th>Engine</th><th>Why</th></tr>
+    <tr><td>Vocals, solo melody</td><td>Formant (Vocal)</td><td>Most natural voice; keeps formants and can move them.</td></tr>
+    <tr><td>Chords, pads, keys</td><td>Poly (Chords)</td><td>Shifts everything at once, chords included.</td></tr>
+    <tr><td>Live guitar, Whammy moves</td><td>Low Latency</td><td>Shortest delay; tight under the fingers.</td></tr>
+    <tr><td>Lo-fi, 1970s character</td><td>Vintage 910</td><td>Glitchy splices like the first harmonizers.</td></tr>
+  </table>
+  <div class="tip"><b>Tip.</b> Set <b>Input</b> so the level meter peaks around two-thirds. If the note readout flickers, turn <b>Tracking</b> down. If it's slow to pick up quiet notes, turn it up.</div>
+</section>
+
+<!-- SIGNAL FLOW -->
+<section class="chapter">
+  <h2>4 &nbsp;Signal flow</h2>
+  <div class="diagram">  INPUT ──► Input gain ──► Pitch tracker (note, key)          SIDECHAIN ──► Chord detector
+                │                     │                                              │
+                │                     ▼                                              ▼
+                │           Harmony brain: Mode + Key/Scale + MIDI + Sidechain chord ─┘
+                │                     │
+                ├──► Drop/Raise + Bend + Correction ──► DRY path (shifted if needed)
+                │
+                ├──► Voices 1–4 (× Choir copies): interval, detune, delay, pan,
+                │     formant, glide, vibrato, humanize, HarModulator
+                ├──► Octaves (Sub 2 / Sub 1 / Up 1 / Up 2) + Tracking Synth
+                ├──► Freeze
+                ▼
+          HARMONY bus ──► Crystal Echoes ──► Shimmer Reverb
+                │
+     Dry level + Harmony level ──► Stereo mode / Width ──► Output gain ──► OUTPUT</div>
+  <p><b>Dry</b> is your original signal. It is pitch-shifted only when you use Drop/Raise, a Bend targeting "Everything", or Pitch Correction. <b>Harmony</b> is everything Chillarmonizer adds. Set the two levels separately: turn Dry down to hear only the effect, for example on a send.</p>
+  <p>The <b>On</b> switch bypasses the effect with a short crossfade, so switching never clicks.</p>
+</section>
+
+<!-- HEADER -->
+<section class="chapter">
+  <h2>5 &nbsp;The header and display</h2>
+  <table>
+    <tr><th>Control</th><th>What it does</th></tr>
+    <tr><td>Preset menu</td><td>Choose a factory preset or one of your own. The <b>&lt;</b> and <b>&gt;</b> buttons step through the list.</td></tr>
+    <tr><td>SAVE</td><td>Saves the current settings as a <span class="k">.chillarm</span> file in <span class="k">Documents/Chillarmonizer Presets</span>. Saved presets appear at the end of the menu.</td></tr>
+    <tr><td>A / B</td><td>Two complete settings slots. Click to switch which slot you are editing.</td></tr>
+    <tr><td>A&gt;B</td><td>Copies slot A into slot B, so you can make a variation.</td></tr>
+  </table>
+  <h3>Live display</h3>
+  <ul>
+    <li><b>Input note</b>, such as <i>A3 +12c</i>: the note detected and how many cents sharp or flat it is. A dash means no clear pitch (silence, noise or a chord).</li>
+    <li><b>Key</b>: the key in use. With Key set to Auto, this is the detected key.</li>
+    <li><b>Chord</b>: the chord read from the sidechain, shown in Sidechain Chord mode.</li>
+    <li><b>Keyboard</b> (C2–C6): gold is your input note, and each harmony voice lights up in its own colour. MIDI notes you hold are marked too.</li>
+    <li><b>Meters</b>: input and output level.</li>
+  </ul>
+</section>
+
+<!-- HARMONY PAGE -->
+<section class="chapter">
+  <h2>6 &nbsp;HARMONY page</h2>
+  <h3>Harmony section</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Mode</td><td>5 modes</td><td>How harmony notes are chosen: Fixed Interval, Diatonic (Key), MIDI Chord, MIDI Notes, Sidechain Chord. See chapter 7.</td></tr>
+    <tr><td>Key</td><td>Auto, C – B</td><td>The song's key, used by Diatonic mode, Correct To: Scale and the voice Degrees. <b>Auto</b> detects it from the notes you play over the last several seconds.</td></tr>
+    <tr><td>Scale</td><td>14 scales</td><td>Major, Natural Minor, Harmonic Minor, Melodic Minor, Dorian, Phrygian, Lydian, Mixolydian, Locrian, Major Pentatonic, Minor Pentatonic, Blues, Whole Tone, Chromatic.</td></tr>
+    <tr><td>Glide</td><td>0 – 1000 ms</td><td>How smoothly the harmony moves when it changes note. Low values are snappy; high values slide like a portamento.</td></tr>
+    <tr><td>Tracking</td><td>0 – 100 %</td><td>Pitch-detection sensitivity. Higher values react to quieter or breathier notes; lower values ignore noise.</td></tr>
+  </table>
+  <h3>Shifter section</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Engine</td><td>4 engines</td><td>Formant (Vocal), Poly (Chords), Low Latency, Vintage 910. See chapter 8.</td></tr>
+    <tr><td>Formant</td><td>±12 st</td><td>Global formant shift (Formant engine only). Negative values sound larger and darker; positive values sound smaller and brighter. Pitch stays the same.</td></tr>
+  </table>
+  <h3>Choir &amp; Humanize section</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Choir</td><td>Off, 2 – 4 each</td><td>Turns each active voice into several copies, so one voice becomes a section.</td></tr>
+    <tr><td>Spread</td><td>0 – 100 %</td><td>How far the choir copies spread in pitch, timing and stereo position.</td></tr>
+    <tr><td>Humanize</td><td>0 – 100 %</td><td>Small random drifts in pitch and timing, so the harmonies sound less mechanical.</td></tr>
+    <tr><td>Vibrato Depth</td><td>0 – 100 cents</td><td>Adds vibrato to the harmony voices.</td></tr>
+    <tr><td>Vibrato Rate</td><td>0.5 – 10 Hz</td><td>Vibrato speed.</td></tr>
+  </table>
+  <h3>Voice 1 – 4 sections</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>On</td><td>Off / On</td><td>Turns the voice on. Only Voice 1 is on by default.</td></tr>
+    <tr><td>Interval</td><td>±24 semitones</td><td>Fixed Interval mode: the distance from your note, e.g. +4 (M3), +7 (5th), −12 (octave down).</td></tr>
+    <tr><td>Degree</td><td>±14 steps</td><td>Diatonic mode: scale steps (<i>3rd up</i> = two scale steps up). Chord modes: chord tones above or below your note (<i>2nd up</i> = the next chord tone but one).</td></tr>
+    <tr><td>Level</td><td>0 – 100 %</td><td>Voice volume.</td></tr>
+    <tr><td>Pan</td><td>L – R</td><td>Stereo position.</td></tr>
+    <tr><td>Detune</td><td>±50 cents</td><td>Fine pitch offset. Small amounts (5–12 c) give a doubling or chorus.</td></tr>
+    <tr><td>Delay</td><td>0 – 1000 ms</td><td>Delays the voice. Short delays thicken; long ones give an echo or canon.</td></tr>
+    <tr><td>Beat</td><td>Off (ms), 1/16 – 1 Bar</td><td>Locks the delay to the song tempo. When set, it replaces the Delay knob.</td></tr>
+    <tr><td>Formant</td><td>±12 st</td><td>Per-voice formant shift (Formant engine), added to the global Formant. Use it to give each voice its own character.</td></tr>
+  </table>
+  <p class="footer-note">Controls that don't apply to the current mode or engine are greyed out. For example, Interval is greyed out in Diatonic mode and Degree is greyed out in Fixed Interval mode.</p>
+</section>
+
+<!-- MODES -->
+<section class="chapter">
+  <h2>7 &nbsp;Harmony modes in depth</h2>
+  <div class="card"><h4>Fixed Interval</h4>
+  <p>Each voice is always the same distance from your note, set with <b>Interval</b>. Perfect intervals (5ths, 4ths, octaves) sound right in any key. Thirds and sixths will sometimes clash with the key. This is the classic Whammy and PS-6 behaviour, and it works with chords on the Poly engine.</p></div>
+  <div class="card" style="margin-top:8pt"><h4>Diatonic (Key)</h4>
+  <p>Harmonies stay inside the chosen <b>Key</b> and <b>Scale</b>. A "3rd up" is sometimes a major third and sometimes a minor third, depending on where your note sits in the scale, just as a backing singer would choose. If you sing a note outside the scale, the harmony is worked out from the nearest scale note.</p>
+  <p>Common Degree settings: <b>3rd up</b> (+2), <b>5th up</b> (+4), <b>6th up</b> (+5), <b>Octave</b> (+7), <b>4th down</b> (−3), <b>6th down</b> (−5).</p></div>
+  <div class="card" style="margin-top:8pt"><h4>MIDI Chord</h4>
+  <p>Hold a chord on a MIDI keyboard. Each voice moves to the chord tone that is <b>Degree</b> chord-tones above or below your sung note. The harmony follows the chord changes even when the melody note stays the same. With no chord held, the voices are silent.</p></div>
+  <div class="card" style="margin-top:8pt"><h4>MIDI Notes</h4>
+  <p>Each MIDI note you hold is given to a voice, lowest note to Voice 1, next to Voice 2 and so on, up to four. The voices sing exactly those notes, re-pitching your input. This is how you "play" a choir from a keyboard (preset <i>MIDI Choir (Play Keys)</i>). Turn on as many voices as notes you want.</p></div>
+  <div class="card" style="margin-top:8pt"><h4>Sidechain Chord</h4>
+  <p>Chillarmonizer listens to the <b>sidechain</b> input, works out which chord is being played (major, minor, 7, maj7, m7, dim, sus2, sus4) and harmonises the main input using those chord tones. Typical use: a guitar track on the sidechain steering harmonies on a vocal. The detected chord is shown in the display.</p>
+  <p>For best results, use a clean, clearly strummed or picked part on the sidechain. Heavy distortion and bass-only parts are hard to read.</p></div>
+</section>
+
+<!-- ENGINES -->
+<section class="chapter">
+  <h2>8 &nbsp;Shifting engines</h2>
+  <table>
+    <tr><th>Engine</th><th>How it works</th><th>Strengths</th><th>Limits</th></tr>
+    <tr><td>Formant (Vocal)</td><td>Pitch-synchronous overlap-add (PSOLA), driven by the pitch tracker.</td><td>Natural voices; formants preserved and adjustable; Formant knobs active.</td><td>One note at a time. About 25 ms latency.</td></tr>
+    <tr><td>Poly (Chords)</td><td>Four overlapping 70 ms grains.</td><td>Handles chords and complex sounds; smooth.</td><td>Slight chorus or smear on large shifts.</td></tr>
+    <tr><td>Low Latency</td><td>Two grains sized to whole periods of the detected pitch (8–30 ms).</td><td>Tight feel for live playing and bends.</td><td>Best on single notes.</td></tr>
+    <tr><td>Vintage 910</td><td>Two 35 ms grains with near-hard splices.</td><td>Classic glitchy, gritty harmonizer sound.</td><td>Deliberately imperfect.</td></tr>
+  </table>
+  <p>The engine applies to the harmony voices, Bends, Drop/Raise and Correction. Octaves always use their own polyphonic shifters.</p>
+  <div class="tip"><b>Pitch tracking.</b> The tracker covers about 60 Hz to 1.5 kHz, roughly a low B on a bass guitar up to a high soprano. That covers voices, guitar, bass and most lead instruments.</div>
+</section>
+
+<!-- PITCH FX -->
+<section class="chapter">
+  <h2>9 &nbsp;PITCH FX page</h2>
+  <h3>Whammy / Bend</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Bend (Expression)</td><td>0 – 100 %</td><td>The pedal position: 0 % = Heel, 100 % = Toe. Map an expression pedal to MIDI CC 11 or automate it.</td></tr>
+    <tr><td>Heel</td><td>±24 st</td><td>Pitch shift with the pedal fully back.</td></tr>
+    <tr><td>Toe</td><td>±24 st</td><td>Pitch shift with the pedal fully forward.</td></tr>
+    <tr><td>Target</td><td>Voices / Everything</td><td><b>Everything</b> bends the dry signal too, like a Whammy. <b>Voices</b> bends only the harmonies.</td></tr>
+    <tr><td>BEND button</td><td>Off / On</td><td>Triggers a ramped bend from Heel to Toe without a pedal. It can also be triggered with CC 80.</td></tr>
+    <tr><td>Switch</td><td>Momentary / Latch</td><td><b>Momentary</b> bends while held and returns on release. <b>Latch</b> toggles on each press.</td></tr>
+    <tr><td>Rise / Fall</td><td>0 – 3000 ms</td><td>Bend time going up and coming back (for the BEND button).</td></tr>
+  </table>
+  <p>The MIDI <b>pitch wheel</b> also bends the harmony up to ±2 semitones.</p>
+  <h3>Drop / Raise</h3>
+  <p><b>Drop / Raise</b> (±24 st) retunes the whole signal, dry included. Set −2 for drop D or −12 for a baritone octave, with no need to retune your instrument. The Poly engine sounds best with chords.</p>
+  <h3>HarModulator</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Depth</td><td>0 – 1200 cents</td><td>How far the LFO moves the harmony pitch. Small values give chorus or vibrato; large values give siren-style sweeps.</td></tr>
+    <tr><td>Rate</td><td>0.05 – 10 Hz</td><td>LFO speed (when Sync is off).</td></tr>
+    <tr><td>Shape</td><td>Sine, Triangle, Random, Square</td><td>Square gives trills between two pitches; Random gives a stepped sample-and-hold.</td></tr>
+    <tr><td>Sync / Division</td><td>1/64 – 4 Bars</td><td>Locks the LFO to host tempo.</td></tr>
+  </table>
+  <h3>Freeze</h3>
+  <p><b>Freeze</b> captures the current sound and holds it as an endless drone while you keep playing over it. <b>Freeze Level</b> sets its volume. Control it with MIDI CC 64 (sustain pedal: held = frozen) or CC 81 (each press toggles it).</p>
+  <h3>Pitch Correction</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Amount</td><td>0 – 100 %</td><td>How far notes are pulled toward the target. 0 % = off.</td></tr>
+    <tr><td>Speed</td><td>0 – 400 ms</td><td>Retune speed. 0 ms = hard, robotic "T-Pain" tuning; 40–80 ms = natural.</td></tr>
+    <tr><td>Correct To</td><td>Chromatic, Scale, MIDI Note, Robot</td><td>Nearest semitone; nearest note in Key/Scale; the MIDI note you hold; or Robot (a flat, steady pitch).</td></tr>
+  </table>
+  <p>Correction applies to the dry signal, and the harmonies are built from the corrected pitch.</p>
+</section>
+
+<!-- OCTAVES & FX -->
+<section class="chapter">
+  <h2>10 &nbsp;OCTAVES &amp; FX page</h2>
+  <h3>Octaves</h3>
+  <p>Polyphonic octave voices in the style of POG and OC-5 pedals. They track chords and run alongside the harmony voices.</p>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Sub 2 / Sub 1</td><td>0 – 100 %</td><td>Level of two octaves down and one octave down.</td></tr>
+    <tr><td>Up 1 / Up 2</td><td>0 – 100 %</td><td>Level of one octave up and two octaves up.</td></tr>
+    <tr><td>Attack</td><td>Off – 1.5 s</td><td>Swells the octaves in after each new note, for pad and organ sounds.</td></tr>
+    <tr><td>Filter</td><td>200 Hz – 20 kHz</td><td>Low-pass filter on the octaves.</td></tr>
+    <tr><td>Resonance</td><td>0 – 100 %</td><td>Filter resonance.</td></tr>
+    <tr><td>Detune</td><td>0 – 100 %</td><td>Detunes the octaves against each other for a 12-string or organ shimmer.</td></tr>
+  </table>
+  <h3>Tracking Synth</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Level</td><td>0 – 100 %</td><td>Volume of a synth oscillator that follows your pitch and dynamics.</td></tr>
+    <tr><td>Octave</td><td>−2, −1, Unison, +1</td><td>Synth register relative to your note.</td></tr>
+    <tr><td>Wave</td><td>Saw, Square, Sine</td><td>Waveform. The synth goes through the Octave Filter too, so shape it there.</td></tr>
+  </table>
+  <h3>Crystal Echoes</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Mix</td><td>0 – 100 %</td><td>Echo level.</td></tr>
+    <tr><td>Time / Sync</td><td>20 – 2500 ms, or 1/64 – 4 Bars</td><td>Delay time, free or tempo-synced.</td></tr>
+    <tr><td>Feedback</td><td>0 – 95 %</td><td>Number of repeats.</td></tr>
+    <tr><td>Pitch</td><td>±24 st</td><td>Each repeat is shifted by this amount, so +12 climbs an octave per repeat.</td></tr>
+    <tr><td>Tone</td><td>1 – 18 kHz</td><td>Darkens the repeats.</td></tr>
+    <tr><td>Reverse</td><td>Off / On</td><td>Plays the pitched grains backwards for the H3000 "Crystals" sparkle.</td></tr>
+  </table>
+  <h3>Shimmer Reverb</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Mix</td><td>0 – 100 %</td><td>Reverb level.</td></tr>
+    <tr><td>Decay</td><td>0 – 100 %</td><td>Reverb length.</td></tr>
+    <tr><td>Shimmer</td><td>0 – 100 %</td><td>How much pitch-shifted sound is fed back into the reverb.</td></tr>
+    <tr><td>Shimmer Pitch</td><td>−12, +5, +7, +12, +19, +24</td><td>Interval of the shimmer. +12 is the classic octave shimmer.</td></tr>
+  </table>
+</section>
+
+<!-- OUTPUT -->
+<section class="chapter">
+  <h2>11 &nbsp;OUTPUT &amp; MIDI page</h2>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Description</th></tr>
+    <tr><td>Input</td><td>−24 – +12 dB</td><td>Gain into the plugin. It affects pitch tracking.</td></tr>
+    <tr><td>Dry</td><td>−60 – +6 dB</td><td>Level of your original (or drop-tuned / corrected) signal. Fully down = off.</td></tr>
+    <tr><td>Harmony</td><td>−60 – +6 dB</td><td>Level of everything the plugin adds: voices, octaves, synth, freeze, echoes and reverb.</td></tr>
+    <tr><td>Output</td><td>−24 – +12 dB</td><td>Final level.</td></tr>
+    <tr><td>Width</td><td>0 – 200 %</td><td>Stereo width of the harmony. 0 % = mono; above 100 % = extra wide.</td></tr>
+    <tr><td>Stereo</td><td>Stereo / Split / Mono</td><td><b>Split</b> sends dry to the left and harmony to the right, for two amps or for processing them separately.</td></tr>
+    <tr><td>On</td><td>Off / On</td><td>Click-free bypass.</td></tr>
+    <tr><td>Morph</td><td>A … B</td><td>Blends every continuous setting between slots A and B. See chapter 13.</td></tr>
+  </table>
+  <p>The page also shows the MIDI map (chapter 12) as a reminder.</p>
+</section>
+
+<!-- MIDI -->
+<section class="chapter">
+  <h2>12 &nbsp;MIDI control</h2>
+  <table>
+    <tr><th>Message</th><th>Function</th></tr>
+    <tr><td>Notes</td><td>Drive MIDI Chord and MIDI Notes modes, and Correct To: MIDI Note.</td></tr>
+    <tr><td>Pitch wheel</td><td>Bends the harmony ±2 semitones.</td></tr>
+    <tr><td>Program Change</td><td>Selects factory preset 1, 2, 3 … (0 = Init).</td></tr>
+    <tr><td>CC 82 / CC 83</td><td>Next / previous preset (values of 64 and above trigger).</td></tr>
+    <tr><td>CC 1 (Mod wheel)</td><td>HarModulator Depth.</td></tr>
+    <tr><td>CC 4 (Foot controller)</td><td>Morph A &harr; B.</td></tr>
+    <tr><td>CC 11 (Expression)</td><td>Whammy Bend position, Heel &rarr; Toe.</td></tr>
+    <tr><td>CC 64 (Sustain)</td><td>Hold Freeze: pressed = frozen, released = off.</td></tr>
+    <tr><td>CC 80</td><td>BEND switch (follows the Momentary / Latch setting).</td></tr>
+    <tr><td>CC 81</td><td>Freeze on / off toggle.</td></tr>
+  </table>
+  <p>Every parameter can also be automated in your DAW or assigned with its MIDI-learn feature.</p>
+  <div class="tip"><b>Live rig.</b> A MIDI foot controller with one expression pedal on CC 11 and three switches on CC 80, CC 81 and CC 82 turns Chillarmonizer into a Whammy, a freeze pedal and a preset switcher at once.</div>
+</section>
+
+<!-- PRESETS -->
+<section class="chapter">
+  <h2>13 &nbsp;Presets, A/B and Morph</h2>
+  <h3>Factory and user presets</h3>
+  <p>Choose presets from the header menu or step through them with &lt; / &gt;. Click <b>SAVE</b> and name your sound to store it as a <span class="k">.chillarm</span> file in <span class="k">Documents/Chillarmonizer Presets</span>. Your presets appear below the factory list. You can copy the files to another computer or share them.</p>
+  <p>Your DAW also saves the full state, including both A/B slots, with the project.</p>
+  <h3>A/B slots</h3>
+  <p>Chillarmonizer holds two complete settings, <b>A</b> and <b>B</b>. Click A or B to edit that slot. <b>A&gt;B</b> copies A into B as a starting point for a variation. Use the slots to compare two ideas, or to set up a verse sound and a chorus sound.</p>
+  <h3>Morph</h3>
+  <p><b>Morph</b> blends between slot A and slot B. Every continuous knob (levels, intervals, mixes, times) glides smoothly. Switches and menus (mode, engine, key and so on) are not morphed: they keep their current setting, so set them the same in both slots. Put Morph on an expression pedal (CC 4) or automate it to move from a dry verse to a full choir chorus in one motion.</p>
+</section>
+
+<!-- FACTORY PRESETS -->
+<section class="chapter">
+  <h2>14 &nbsp;Factory presets</h2>
+  <table>
+    <tr><th>#</th><th>Preset</th><th>What it does</th></tr>
+    <tr><td>0</td><td>Init</td><td>Default settings: one diatonic voice, a third up in C major.</td></tr>
+    <tr><td>1</td><td>Diatonic 3rd Up</td><td>One harmony a third above, in key.</td></tr>
+    <tr><td>2</td><td>Thirds &amp; Fifths</td><td>Two-voice diatonic triad, spread left and right.</td></tr>
+    <tr><td>3</td><td>Power Fifth</td><td>Fifth and octave above: instant power-chord lead.</td></tr>
+    <tr><td>4</td><td>Twelve-String</td><td>Detuned octave-up doubling, 12-string style.</td></tr>
+    <tr><td>5</td><td>MicroPitch Doubler</td><td>Two slightly detuned, delayed copies hard-panned: classic stereo thickening.</td></tr>
+    <tr><td>6</td><td>Whammy Octave (Exp)</td><td>Expression pedal (CC 11) sweeps the whole signal up an octave.</td></tr>
+    <tr><td>7</td><td>Whammy Dive Bomb</td><td>BEND switch dives two octaves down.</td></tr>
+    <tr><td>8</td><td>Ricochet Fifth</td><td>Momentary jump up a fifth with fast rise and fall.</td></tr>
+    <tr><td>9</td><td>Drop D Tune</td><td>Whole signal down a whole tone.</td></tr>
+    <tr><td>10</td><td>Baritone Drop Octave</td><td>Whole signal down an octave.</td></tr>
+    <tr><td>11</td><td>POG Organ</td><td>Sub and upper octaves with a soft filter: organ-like guitar.</td></tr>
+    <tr><td>12</td><td>Sub Octave Bass</td><td>Strong sub octaves for bass lines from guitar.</td></tr>
+    <tr><td>13</td><td>HOG Swell Pad</td><td>Octaves that swell in, plus shimmer: ambient pads.</td></tr>
+    <tr><td>14</td><td>Choir of Thirds</td><td>Diatonic thirds and fifths with choir and humanize.</td></tr>
+    <tr><td>15</td><td>Vocal Duet</td><td>One natural, humanized harmony voice.</td></tr>
+    <tr><td>16</td><td>Formant Monster</td><td>Fifth below with formants down: big, dark creature voice.</td></tr>
+    <tr><td>17</td><td>Helium</td><td>Fifth above with formants up: chipmunk voice.</td></tr>
+    <tr><td>18</td><td>Hard Tune</td><td>Instant, robotic pitch correction to the scale.</td></tr>
+    <tr><td>19</td><td>Natural Pitch Correct</td><td>Gentle, transparent correction.</td></tr>
+    <tr><td>20</td><td>Robot Voice</td><td>Flat monotone robot.</td></tr>
+    <tr><td>21</td><td>MIDI Choir (Play Keys)</td><td>Play up to four notes on a keyboard and your voice sings them.</td></tr>
+    <tr><td>22</td><td>MIDI Chord Follow</td><td>Harmony follows the chord you hold on a keyboard.</td></tr>
+    <tr><td>23</td><td>Guitar Steers Vocals</td><td>Sidechain guitar chords choose the vocal harmonies.</td></tr>
+    <tr><td>24</td><td>Crystals</td><td>Reverse octave-up echoes: H3000-style sparkle.</td></tr>
+    <tr><td>25</td><td>Crystal Echoes Up</td><td>Each repeat climbs a fifth.</td></tr>
+    <tr><td>26</td><td>Shimmer Cathedral</td><td>Long octave-shimmer reverb.</td></tr>
+    <tr><td>27</td><td>HarModulator Wobble</td><td>LFO-modulated pitch voices panned wide.</td></tr>
+    <tr><td>28</td><td>Rhythmic Harmonies</td><td>Tempo-delayed diatonic voices bouncing left and right.</td></tr>
+    <tr><td>29</td><td>Vintage 910 Glitch</td><td>Fifth up through the vintage engine with pitched echoes.</td></tr>
+    <tr><td>30</td><td>Synth Tracker</td><td>Square-wave synth following your playing an octave down.</td></tr>
+    <tr><td>31</td><td>Freeze Drone (hit Freeze)</td><td>Press Freeze (or CC 64) to hold a drone and play over it.</td></tr>
+  </table>
+</section>
+
+<!-- RECIPES -->
+<section class="chapter">
+  <h2>15 &nbsp;Recipes</h2>
+  <div class="grid2">
+    <div class="card"><h4>Backing vocals from a lead</h4>
+      <p>Mode Diatonic, Engine Formant. Voice 1: 3rd up, pan −40 %. Voice 2: 5th up, pan +40 %. Choir 2, Spread 40 %, Humanize 30 %. Lower Harmony to −6 dB so the lead stays on top.</p></div>
+    <div class="card"><h4>Low octave "bass singer"</h4>
+      <p>Mode Fixed. Voice 1: Interval −12, Formant −3, pan centre, Level 70 %. Add Glide 60 ms for smooth note changes.</p></div>
+    <div class="card"><h4>Dual-guitar harmony lead</h4>
+      <p>Mode Diatonic, Engine Low Latency. Voice 1: 3rd up, pan right. Dry pan stays centre; use Stereo: Split if you run two amps.</p></div>
+    <div class="card"><h4>Whammy-style pedal rig</h4>
+      <p>Bend Target Everything, Engine Low Latency, Heel 0, Toe +12. Expression pedal on CC 11. Dry at 0 dB, voices off.</p></div>
+    <div class="card"><h4>Verse-to-chorus lift</h4>
+      <p>Slot A: one quiet voice. Click A&gt;B, then in B turn on four voices, Choir 3 and some shimmer. Automate Morph from A to B at the chorus.</p></div>
+    <div class="card"><h4>Ambient swell machine</h4>
+      <p>Octaves Sub 1 50 %, Up 1 60 %, Attack 0.9 s. Reverb Mix 45 %, Decay 85 %, Shimmer 50 % at +12. Freeze on CC 64 for drones.</p></div>
+    <div class="card"><h4>Keys play the choir</h4>
+      <p>Mode MIDI Notes, all four voices on, Engine Formant, Dry −60 dB. Hold chords on a MIDI keyboard while singing a single sustained note.</p></div>
+    <div class="card"><h4>Rhythmic canon</h4>
+      <p>Mode Diatonic. Voice 1: 3rd up, Beat 1/8D, pan left. Voice 2: 5th up, Beat 1/4, pan right. Add a little Crystal Echo.</p></div>
+  </div>
+</section>
+
+<!-- TROUBLESHOOTING -->
+<section class="chapter">
+  <h2>16 &nbsp;Troubleshooting</h2>
+  <table>
+    <tr><th>Problem</th><th>Try this</th></tr>
+    <tr><td>Harmony sounds warbly or jumps notes</td><td>Raise Input so the meter is healthy. Lower Tracking. Make sure the source is a single note; for chords, use Fixed Interval with the Poly engine.</td></tr>
+    <tr><td>Harmony is in the wrong key</td><td>Set Key by hand instead of Auto, and check the Scale. Auto needs a few seconds of playing to settle.</td></tr>
+    <tr><td>No sound from MIDI modes</td><td>Check that MIDI reaches the plugin (the display keyboard marks held notes). In Logic, use the MIDI-controlled effect version. Make sure the voices are On.</td></tr>
+    <tr><td>Sidechain Chord does nothing</td><td>Enable the sidechain input in your DAW and send the chord track to it. Use clean, mid-register chords.</td></tr>
+    <tr><td>Formant knobs do nothing</td><td>They only work with the Formant (Vocal) engine.</td></tr>
+    <tr><td>Feels late when playing live</td><td>Switch to the Low Latency engine. Formant adds about 25 ms; Poly adds a little more.</td></tr>
+    <tr><td>Echoes or reverb run away</td><td>Lower Echo Feedback or Shimmer. High feedback with large Pitch values builds up fast.</td></tr>
+    <tr><td>Clicks when switching</td><td>Use the On switch or Morph rather than removing the plugin; both crossfade.</td></tr>
+    <tr><td>Plugin not found after install</td><td>Check the install folder (chapter 2) and rescan. On macOS you may need to restart the DAW.</td></tr>
+  </table>
+</section>
+
+<!-- SPECS -->
+<section class="chapter">
+  <h2>17 &nbsp;Specifications</h2>
+  <table>
+    <tr><th>Item</th><th>Detail</th></tr>
+    <tr><td>Formats</td><td>VST3 (Windows, macOS), Audio Unit (macOS, MIDI-controlled effect)</td></tr>
+    <tr><td>Channels</td><td>Mono or stereo in and out, optional stereo sidechain</td></tr>
+    <tr><td>Harmony voices</td><td>4, each with a choir of up to 4 copies (16 total)</td></tr>
+    <tr><td>Harmony modes</td><td>Fixed Interval, Diatonic, MIDI Chord, MIDI Notes, Sidechain Chord</td></tr>
+    <tr><td>Scales</td><td>14</td></tr>
+    <tr><td>Engines</td><td>Formant (PSOLA), Poly (4-grain), Low Latency (period-synced), Vintage 910</td></tr>
+    <tr><td>Pitch tracking range</td><td>About 60 Hz – 1.5 kHz</td></tr>
+    <tr><td>Chord detection</td><td>Major, minor, 7, maj7, m7, dim, sus2, sus4</td></tr>
+    <tr><td>Key detection</td><td>Krumhansl-Schmuckler key profiles on played notes</td></tr>
+    <tr><td>Parameters</td><td>87, all automatable</td></tr>
+    <tr><td>Factory presets</td><td>32, plus unlimited user presets (.chillarm)</td></tr>
+    <tr><td>Manufacturer</td><td>CHILLplugins</td></tr>
+  </table>
+  <p class="footer-note" style="margin-top:20pt">Chillarmonizer is inspired by many classic harmonizers, pitch pedals and plugins. Product names mentioned in this manual belong to their respective owners and are used only to describe the style of an effect. CHILLplugins is not affiliated with them.</p>
+</section>
+
+</body>
+</html>
